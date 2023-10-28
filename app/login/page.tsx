@@ -44,11 +44,8 @@ const page = () => {
     if (data.hasOwnProperty("email")) { // non-error json 
         window.location.href = "../../"
     } else {
-        console.log(data);
         setError(data.message)
-        console.log(error)
         setErrorLink(data.link)
-        console.log(errorLink)
     }
   }
 
