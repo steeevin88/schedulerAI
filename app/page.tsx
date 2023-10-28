@@ -7,7 +7,7 @@ const page = () => {
   return (
     <>
         <section className=''>
-            <h1>
+            <h1 className=' bg-red-950'>
                 Login
             </h1>
             <p>Enter your account credentials, upload your calendar</p>
