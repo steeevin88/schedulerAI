@@ -23,9 +23,42 @@ export const POST = async (req) => {
 
 export const GET = async (req) => {
     try {
-        const users = await prisma.user.findMany();
-        return NextResponse.json(users);
+        const email = req.headers.get("email");
+        const pass = req.headers.get("password");
+        const users = await prisma.user.findUnique({
+            where: {
+                email: email,
+              },
+        })
+        if (pass === users.password) {
+            const response = NextResponse.redirect(new URL('/', req.nextUrl))
+            response.cookies.set('username', email)
+            return response;
+        } else {
+            return NextResponse.json({message: "GET ERROR", err})
+        }
     } catch(err) {
         return NextResponse.json({message: "GET ERROR", err})
     }
 }
+
+/*
+export const DELETE = async (req) => {
+    try {
+        const body = await req.json();
+        const {email} = body;
+        const users = await prisma.user.delete({
+            where: {
+              email: `${email}`,
+            },
+            select: {
+                email: true,
+                name: true,
+            }
+        })
+        return NextResponse.json(users);
+    } catch(err) {
+        return NextResponse.json({message: "DELETE ERROR", err})
+    }
+}
+*/
