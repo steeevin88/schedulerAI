@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  email    String   @unique
-  name     String
-  password String
+  email       String   @unique
+  name        String
+  password    String
   preferences String
-  friends Friend[] @relation("UserFriends")
+  friends     Friend[] @relation("UserFriends")
 }
 
 model Friend {
-  email    String   @unique
-  user User @relation("UserFriends", fields:[email], references: [email])
+  email       String   @unique
+  user        User     @relation("UserFriends", fields:[email], references: [email])
 }
 
 model Event {
-  email    String   @unique
-  event_name String
-  start_time DateTime
-  end_time   DateTime
+  id          Int      @id @default(sequence())
+  email       String   
+  event_name  String
+  start_time  DateTime
+  end_time    DateTime
 }
