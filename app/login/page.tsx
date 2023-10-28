@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 const page = () => {
   const [loginInfo, setloginInfo] = useState({
     email: '',
     password: '',
   })
+  const [error, setError] = useState('')
+  const [errorLink, setErrorLink] = useState('')
 
   const { email, password } = loginInfo;
 
@@ -42,6 +45,10 @@ const page = () => {
         window.location.href = "../../"
     } else {
         console.log(data);
+        setError(data.message)
+        console.log(error)
+        setErrorLink(data.link)
+        console.log(errorLink)
     }
   }
 
@@ -69,6 +76,8 @@ const page = () => {
                 </div>
             </form>
         </section>
+
+        {error && (errorLink ? <Link href={errorLink}>{error}</Link> : <p>{error}</p>)}
     </>
   )
 }
