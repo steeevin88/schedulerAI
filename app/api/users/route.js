@@ -17,9 +17,10 @@ export const POST = async (req) => {
         console.log(userExists)
         if (userExists) {
             console.log('in userExists')
-            return NextResponse.json({message: "An account with that user already exists", link: "../../login"})
+            return NextResponse.json({message: "An account with that user already exists", link: "../../login"});
         }
         
+        console.log('creating user')
         const newUser = await prisma.user.create({ 
             data: {
                 email,
@@ -28,7 +29,8 @@ export const POST = async (req) => {
                 preferences
             }
         })
-        const response = NextResponse.redirect(new URL('/', req.nextUrl))
+        console.log('created user')
+        const response = NextResponse.next();
         response.cookies.set('username', email)
         return response;
     } catch(err) {
@@ -51,14 +53,14 @@ export const GET = async (req) => {
         }
 
         if (pass === user.password) {
-            const response = NextResponse.redirect(new URL('/', req.nextUrl))
+            const response = NextResponse.next();
             response.cookies.set('username', email)
-            return NextResponse.json(user)
+            return response;
         } else {
-            return NextResponse.json({message: "Invalid username / password."})
+            return NextResponse.json({message: "Invalid username / password."});
         }
     } catch(err) {
-        return NextResponse.json({message: "GET ERROR", err})
+        return NextResponse.json({message: "GET ERROR", err});
     }
 }
 

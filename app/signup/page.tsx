@@ -41,14 +41,13 @@ const Page = () => {
     });
     // Make the fetch call and handle the response
     const response = await fetch(request);
-    const data = await response.json();
-    if (data.message) { // error message
+    try { // error (has JSON response)
+      const data = await response.json();
       setError(data.message)
-      if (data.link) {setErrorLink(data.link)}
-      return;
+      if (data.link) setErrorLink(data.link)
+    } catch {
+      window.location.href = "../../"
     }
-    // redirect to home page
-    redirect('/')
   }
 
   return (
@@ -60,7 +59,7 @@ const Page = () => {
           <input className='p-2 my-2 rounded bg-blue-100' name="icsUrl" type="text" placeholder="Link to ICS file" onChange={handleChange} />
           <input className='p-2 my-2 rounded bg-blue-100' name="preferences" type="text" placeholder="What type of events do you enjoy? ('Clubbing, sports, dancing, etc')" onChange={handleChange} />
           <button className='bg-blue-500 rounded p-5' onClick={handleClick} >Sign Up</button>
-          {error && (errorLink ? <Link href={errorLink}>{error}</Link>: <p className='text-red-500'>{error}</p>)}
+          {error && (errorLink ? <Link href={errorLink} className='underline'>{error}. Click here to Log In</Link>: <p className='text-red-500'>{error}</p>)}
       </form>
     </div>
   )
