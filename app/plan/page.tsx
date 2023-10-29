@@ -98,6 +98,7 @@ const Plan: React.FC = () => {
         });
 
 
+        // have actual overlaps
         const merged: [any, any][] = [sorted[0]];
 
         for (let i = 1; i < sorted.length; i++){
@@ -105,27 +106,47 @@ const Plan: React.FC = () => {
             let lastMergedMeeting = merged[merged.length - 1];
             if (currentMeeting[0] <= lastMergedMeeting[1]){
                 lastMergedMeeting[1] = Math.max(lastMergedMeeting[1], currentMeeting[1]);
-
             } else {
                 // console.log(currentMeeting);
                 merged.push(currentMeeting);
             }
         }
 
-        console.log(merged);
+        // console.log(merged);
 
+        // need prev end 
         // Find the gaps
         const openSlots: [any, any][] = [];
-        let prevEndTime = -1 ;
+        let prevEndTime = -1;
         for (const interval of merged){
-            if (prevEndTime !== null && prevEndTime < interval[0]){
+            if (prevEndTime !== -1 && prevEndTime < interval[0]){
                 const temp: [any, any] = [prevEndTime, interval[0]];
-                openSlots.push(temp);
+                const intervalHour = (new Date(interval[0])).getHours()
+                const intervalDay = (new Date(interval[0])).getDate()
+
+                const prevEndTimeHour = (new Date(prevEndTime)).getHours()
+                const prevEndTimeDay = (new Date(prevEndTime)).getDate()
+                if (prevEndTimeHour >=6 && prevEndTimeHour <= 23 && intervalHour >= 6 && intervalHour <= 23 && prevEndTimeDay == intervalDay){
+                    const temp: [any, any] = [prevEndTime, interval[0]]
+                    openSlots.push(temp);
+                }
             }
             prevEndTime = Math.max(interval[1], prevEndTime);
         }
+        for (let i = 0; i < openSlots.length; i++){
+            const diff = openSlots[i][1] - openSlots[i][0];
+            openSlots[i].push(diff);
+        }
+        // console.log(openSlots)
+
+        openSlots.sort((a: any, b: any) => {
+            return a[2] < b[2] ? 1 : -1;
+        });
 
         console.log(openSlots)
+        console.log(new Date(openSlots[0][0]))
+        console.log(new Date(openSlots[0][1]))
+
 
     }
 
