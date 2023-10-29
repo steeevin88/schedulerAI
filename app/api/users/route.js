@@ -38,16 +38,19 @@ export const GET = async (req) => {
     try {
         const email = req.headers.get("email");
         const pass = req.headers.get("password");
-        const users = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 email: email,
               },
         })
+        if (user === null) {
+            return NextResponse.json({message: "User does not exist", link: "../../signup"})
+        }
 
-        if (pass === users.password) {
+        if (pass === user.password) {
             const response = NextResponse.redirect(new URL('/', req.nextUrl))
             response.cookies.set('username', email)
-            return NextResponse.json(users)
+            return NextResponse.json(user)
         } else {
             return NextResponse.json({message: "Invalid username/ password.", err})
         }

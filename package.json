@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^14.0.0",
     "@prisma/client": "^5.5.2",
     "next": "14.0.0",
     "pg": "^8.11.3",
