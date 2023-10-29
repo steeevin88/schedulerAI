@@ -7,6 +7,9 @@ const FileUpload: React.FC = () => {
   const [fileContent, setFileContent] = useState<string>(''); // State to store file content
   const [jsonData, setJsonData] = useState<any>(null); // State to store parsed JSON data
 
+  const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
+  const username = usernameCookie ? usernameCookie[2] : null;
+
   function parseDateString(dateString: string): Date {
     const year: number = parseInt(dateString.substr(0, 4), 10);
     const month: number = parseInt(dateString.substr(4, 2), 10) - 1; // Month in JavaScript Date object is 0-indexed
@@ -66,7 +69,8 @@ const FileUpload: React.FC = () => {
         index++;
         const event_name = newArray[index].substring(8, newArray[index].length - 1);
         index++;
-        const email = "johnsmith@gmail.com"
+
+        const email = username
         const event = {
           email,
           start_time,
@@ -103,10 +107,12 @@ const FileUpload: React.FC = () => {
 
     // Read the file as text
     reader.readAsText(file);
+
+    setTimeout(() => {window.location.href = '../../'}, 1000);
   };
 
   return (
-    <div>
+    <div className='flex rounded-xl align-middle justify-center m-[10%] p-10 bg-blue-200 flex-col flex-grow'>
       <h1>Upload File and Convert to JSON</h1>
       <input type="file" onChange={handleFileUpload} />
       <div>
