@@ -66,7 +66,7 @@ const FileUpload: React.FC = () => {
         index++;
         const event_name = newArray[index].substring(8, newArray[index].length - 1);
         index++;
-        const email = "kellysmith@gmail.com"
+        const email = "johnsmith@gmail.com"
         const event = {
           email,
           start_time,
