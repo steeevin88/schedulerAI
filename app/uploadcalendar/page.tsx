@@ -36,10 +36,13 @@ const FileUpload: React.FC = () => {
       const filteredArray = lines.filter(line=>{
         return line.includes("DTSTART") || line.includes("DTEND") || line.includes("SUMMARY");
       });
-      
-      const newArray = filteredArray.splice(2);
+      //  for (let i = 0; i < filteredArray.length; i++){
+      //   console.log(filteredArray[i]);
+      // }
+      // const newArray = filteredArray.splice(2);
+      const newArray = filteredArray;
       let index = 0;
-      let events = [];
+      const events: any[] = [];
       const pattern = /\b\d{8}T\d{6}Z\b/;
       // for (let i = 0; i < newArray.length; i++){
       //   console.log(newArray[i]);
@@ -54,15 +57,16 @@ const FileUpload: React.FC = () => {
         index++;
 
         let end_time;
+        // console.log(newArray[index]);
         const end_time_regex = newArray[index].match(pattern);
         if (end_time_regex){
           end_time = parseDateString(end_time_regex.join(''))
         }
 
         index++;
-        const event_name = newArray[index].substring(7, newArray[index].length - 1);
+        const event_name = newArray[index].substring(8, newArray[index].length - 1);
         index++;
-        const email = "johndoe@gmail.com"
+        const email = "kellysmith@gmail.com"
         const event = {
           email,
           start_time,
@@ -87,7 +91,6 @@ const FileUpload: React.FC = () => {
       for (let i = 0; i < events.length; i++){
         // console.log(events[i]);
         const eventJSON = JSON.stringify(events[i]);
-        console.log(eventJSON);
         const request = new Request(`../api/calendar`, {
           method: "Post",
           body: eventJSON,
