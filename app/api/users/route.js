@@ -1,3 +1,6 @@
+'use server'
+ 
+import { cookies } from 'next/headers'
 import prisma from '../../libs/prisma';
 import { NextResponse } from 'next/server';
  
@@ -26,14 +29,15 @@ export const POST = async (req) => {
                 email,
                 icsUrl,
                 password,
-                preferences
+                preferences,
             }
         })
-        console.log('created user')
-        const response = NextResponse.next();
-        response.cookies.set('username', email)
-        return response;
+        console.log("setting cookie")
+        cookies().set('username', email);
+        console.log("cookie set")
+        return new NextResponse();
     } catch(err) {
+        console.log(err);
         return NextResponse.json({message: "POST ERROR", err});
     }
 }
@@ -53,9 +57,10 @@ export const GET = async (req) => {
         }
 
         if (pass === user.password) {
-            const response = NextResponse.next();
-            response.cookies.set('username', email)
-            return response;
+            console.log("setting cookie")
+            cookies().set('username', email);
+            console.log("cookie set")
+            return new NextResponse();
         } else {
             return NextResponse.json({message: "Invalid username / password."});
         }
@@ -64,23 +69,13 @@ export const GET = async (req) => {
     }
 }
 
-/*
-export const DELETE = async (req) => {
-    try {
-        const body = await req.json();
-        const {email} = body;
-        const users = await prisma.user.delete({
-            where: {
-              email: `${email}`,
-            },
-            select: {
-                email: true,
-                name: true,
-            }
-        })
-        return NextResponse.json(users);
-    } catch(err) {
-        return NextResponse.json({message: "DELETE ERROR", err})
-    }
-}
-*/
+// export const DELETE = async (req) => {
+//     try {
+//         const body = await req.json();
+//         const {email} = body;
+//         const users = await prisma.user.deleteMany({})
+//         return NextResponse.json(users);
+//     } catch(err) {
+//         return NextResponse.json({message: "DELETE ERROR", err})
+//     }
+// }
