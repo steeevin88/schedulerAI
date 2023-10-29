@@ -5,22 +5,25 @@ import { NextResponse } from 'next/server';
 export const POST = async (req) => {
     try {
         const body = await req.json();
-        const {email, name, password, preferences} = body;
+        const {email, icsUrl, password, preferences} = body;
 
+        console.log("got body")
         // check if email is already registered
         const userExists = await prisma.user.findUnique({
             where: {
                 email: email,
               },
         })
-        if (userExists !== null) {
-            return NextResponse.json({message: "An account with that user already exists"})
+        console.log(userExists)
+        if (userExists) {
+            console.log('in userExists')
+            return NextResponse.json({message: "An account with that user already exists", link: "../../login"})
         }
         
         const newUser = await prisma.user.create({ 
             data: {
                 email,
-                name,
+                icsUrl,
                 password,
                 preferences
             }
@@ -52,7 +55,7 @@ export const GET = async (req) => {
             response.cookies.set('username', email)
             return NextResponse.json(user)
         } else {
-            return NextResponse.json({message: "Invalid username/ password.", err})
+            return NextResponse.json({message: "Invalid username / password."})
         }
     } catch(err) {
         return NextResponse.json({message: "GET ERROR", err})
