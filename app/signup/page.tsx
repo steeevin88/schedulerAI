@@ -55,7 +55,7 @@ const Page = () => {
 
 
       // redirect to upload calendar
-      window.location.href = "../../calendar"
+      window.location.href = "../../uploadcalendar"
     }
   }
 
