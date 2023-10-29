@@ -7,6 +7,18 @@ const FileUpload: React.FC = () => {
   const [fileContent, setFileContent] = useState<string>(''); // State to store file content
   const [jsonData, setJsonData] = useState<any>(null); // State to store parsed JSON data
 
+  function parseDateString(dateString: string): Date {
+    const year: number = parseInt(dateString.substr(0, 4), 10);
+    const month: number = parseInt(dateString.substr(4, 2), 10) - 1; // Month in JavaScript Date object is 0-indexed
+    const day: number = parseInt(dateString.substr(6, 2), 10);
+    const hours: number = parseInt(dateString.substr(9, 2), 10);
+    const minutes: number = parseInt(dateString.substr(11, 2), 10);
+    const seconds: number = parseInt(dateString.substr(13, 2), 10);
+  
+    return new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+  }
+  
+
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) {
       return;
@@ -25,8 +37,6 @@ const FileUpload: React.FC = () => {
         return line.includes("DTSTART") || line.includes("DTEND") || line.includes("SUMMARY");
       });
       
-
-
       const newArray = filteredArray.splice(2);
       let index = 0;
       let events = [];
@@ -34,29 +44,58 @@ const FileUpload: React.FC = () => {
       // for (let i = 0; i < newArray.length; i++){
       //   console.log(newArray[i]);
       // }
-      console.log(newArray.length)
+      // console.log(newArray.length)
       while (index < newArray.length){
-        const dtstart = newArray[index].match(pattern);
+        const start_time_regex = newArray[index].match(pattern);
+        let start_time;
+        if (start_time_regex){
+          start_time = parseDateString(start_time_regex.join(''))
+        }
         index++;
-        const dtend = newArray[index].match(pattern);
+
+        let end_time;
+        const end_time_regex = newArray[index].match(pattern);
+        if (end_time_regex){
+          end_time = parseDateString(end_time_regex.join(''))
+        }
+
         index++;
-        const name = newArray[index];
+        const event_name = newArray[index].substring(7, newArray[index].length - 1);
         index++;
+        const email = "johndoe@gmail.com"
         const event = {
-          dtstart,
-          dtend,
-          name
+          email,
+          start_time,
+          end_time,
+          event_name
         };
-        // console.log(event);
-        events.push(event);
+
+        if (start_time){
+          const month = start_time.getMonth();
+          const year =  start_time.getFullYear();
+          if (year >= 2024 || (year === 2023 && month >= 9)){
+            events.push(event);
+          }
+        }
         
       }
       // console.log("Events")
       // console.log(events);
-      const eventsJSON = JSON.stringify(events);
-      console.log("EventsJSON")
-      console.log(eventsJSON);      
+      // const eventsJSON = JSON.stringify(events);
+      // console.log("EventsJSON")
+      console.log("Before request");   
+      for (let i = 0; i < events.length; i++){
+        // console.log(events[i]);
+        const eventJSON = JSON.stringify(events[i]);
+        console.log(eventJSON);
+        const request = new Request(`../api/calendar`, {
+          method: "Post",
+          body: eventJSON,
+        });
+        fetch(request)
+      }   
       
+
     };
 
     // Read the file as text
@@ -68,10 +107,6 @@ const FileUpload: React.FC = () => {
       <h1>Upload File and Convert to JSON</h1>
       <input type="file" onChange={handleFileUpload} />
       <div>
-        <h2>File Content:</h2>
-        <pre>{fileContent}</pre>
-        <h2>Parsed JSON Data:</h2>
-        <pre>{JSON.stringify(jsonData, null, 2)}</pre>
       </div>
     </div>
   );
