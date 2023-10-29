@@ -37,16 +37,16 @@ function NavBar() {
 				</ul>
 				<div className="flex flex-row justify-between">
 					{username ?
-					(<button className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 " onClick={signOut}>Sign Out</button>) :
+					(<button type="button" className="text-black border dark:shadow-lg bg-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" onClick={signOut}>Sign Out</button>) :
 					(
 					<>
 						<Link href="../login" rel="noopener noreferrer">
-							<button type="button" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
-							Login
+							<button type="button" className="text-black border dark:shadow-lg bg-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
+								Login
 							</button>
 						</Link>
 						<Link href="../signup" rel="noopener noreferrer">
-							<button type="button" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
+							<button type="button" className="text-black border dark:shadow-lg bg-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
 								Sign Up
 							</button>
 						</Link>
