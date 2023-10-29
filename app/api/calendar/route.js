@@ -52,7 +52,4 @@ export const GET = async (req) => {
 } catch (err){
   return NextResponse.json({message: "GET ERROR", err});
 }
-  
-
-      
-  }
+}
