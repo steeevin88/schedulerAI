@@ -100,10 +100,12 @@ const FileUpload: React.FC = () => {
 
     // Read the file as text
     reader.readAsText(file);
+
+    setTimeout(() => {window.location.href = '../../'}, 1000);
   };
 
   return (
-    <div>
+    <div className='flex rounded-xl align-middle justify-center m-[10%] p-10 bg-blue-200 flex-col flex-grow'>
       <h1>Upload File and Convert to JSON</h1>
       <input type="file" onChange={handleFileUpload} />
       <div>

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation'
 import React, { useState } from 'react'
+// const ical = require('node-ical');
 
 const Page = () => {
   const [error, setError] = useState('')
@@ -48,8 +49,13 @@ const Page = () => {
       const data = await response.json();
       setError(data.message)
       if (data.link) setErrorLink(data.link)
-    } catch {
-      window.location.href = "../../"
+    } catch { // successful account sign up
+      // convert icf link to icf via fetch
+      // await ical.async.fromURL(icsUrl, function(err: any, data: any) { console.log(data); });
+
+
+      // redirect to upload calendar
+      window.location.href = "../../calendar"
     }
   }
 
