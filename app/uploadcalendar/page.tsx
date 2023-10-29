@@ -39,7 +39,7 @@ const FileUpload: React.FC = () => {
       
       const newArray = filteredArray.splice(2);
       let index = 0;
-      let events = [];
+      const events: any[] = [];
       const pattern = /\b\d{8}T\d{6}Z\b/;
       // for (let i = 0; i < newArray.length; i++){
       //   console.log(newArray[i]);
@@ -50,7 +50,6 @@ const FileUpload: React.FC = () => {
         let start_time;
         if (start_time_regex){
           start_time = parseDateString(start_time_regex.join(''))
-          console.log(start_time)
         }
         index++;
 
@@ -88,7 +87,6 @@ const FileUpload: React.FC = () => {
       for (let i = 0; i < events.length; i++){
         // console.log(events[i]);
         const eventJSON = JSON.stringify(events[i]);
-        console.log(eventJSON);
         const request = new Request(`../api/calendar`, {
           method: "Post",
           body: eventJSON,

@@ -6,7 +6,7 @@ import React from 'react';
 
 const Plan: React.FC = () => {
   
-    function union(myEmail: string, friendEmail: string){
+    function union(myEmail: string, friendEmail: string) {
         
         const myRequest = new Request(`../api/plan`, {
             method: "GET",

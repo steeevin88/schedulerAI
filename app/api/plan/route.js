@@ -14,8 +14,8 @@ export const GET = async (req) => {
               },
         });
         const scheduleTimes = schedules.map((schedule) => ({
-            start_time: schedule.start_time.toISOString(), // Convert to ISO String if necessary
-            end_time: schedule.end_time.toISOString(),     // Convert to ISO String if necessary
+            start_time: schedule.start_time, // Convert to ISO String if necessary
+            end_time: schedule.end_time,     // Convert to ISO String if necessary
           }));
           console.log(scheduleTimes)
         return NextResponse.json(scheduleTimes);
