@@ -1,5 +1,6 @@
 'use client'
 import React from 'react';
+const axios = require('axios')
 
 //Integrate own email
 //Need to
@@ -149,14 +150,80 @@ const Plan: React.FC = () => {
         callAI(new Date(openSlots[0][0]), new Date(openSlots[0][1]) )
     }
 
-    function callAI(s: Date, e: Date){
+    async function callAI(s: Date, e: Date){
         let start = s.toString().substring(0, 11) + s.toString().substring(16, 21);
         let end = e.toString().substring(0, 11) + e.toString().substring(16, 21);
         
 
 
-        let input = "My friend and I are free from " + start + " to " + end;
-        console.log(input)
+        let input = "My friend and I are free from " + start + " to " + end + ". My preferences are " + "football,hiking,grilling,dining,poetry" + " and my friend's preferences are" + "basketball,nature,tacos,concerts,sculpting" + "Plan an activity for us and return your output in a json format\nexample:\n{\n    title:\n    description:\n}";
+
+        
+        // const res = axios.post('https://api.together.xyz/inference', {
+        // "model": "OpenAssistant/llama2-70b-oasst-sft-v10",
+        // "max_tokens": 512,
+        // "prompt": input,
+        // "request_type": "language-model-inference",
+        // "temperature": 0.7,
+        // "top_p": 0.7,
+        // "top_k": 50,
+        // "repetition_penalty": 1,
+        // "stream_tokens": true,
+        // "stop": [
+        //     "</s>",
+        //     "<|im_end|>"
+        // ],
+        // "negative_prompt": "",
+        // "sessionKey": "c1bb40ca5ee41dc7ac4d7d9cdcbe0146f319d0f1",
+        // "safety_model": "",
+        // "repetitive_penalty": 1,
+        // "update_at": "2023-10-29T15:31:55.697Z"
+        // }, {
+        // headers: {
+        //     Authorization: 'Bearer 9a9e17d3157cf91de4529c6902d8bb205ffd8c93f81afb03e86434ad183bfeb6'
+        // }    
+        // }).then((response) => {
+        // console.log(response);
+        // }, (error) => {
+        // console.log(error);
+        // });
+
+        const options = {
+            method: 'POST',
+            headers: {
+              accept: 'application/json',
+              'content-type': 'application/json',
+              Authorization: 'Bearer 9a9e17d3157cf91de4529c6902d8bb205ffd8c93f81afb03e86434ad183bfeb6'
+            },
+            body: JSON.stringify({
+              model: 'OpenAssistant/llama2-70b-oasst-sft-v10',
+              prompt: input,
+              max_tokens: 128,
+              stop: '.',
+              temperature: 0,
+              top_p: 0.7,
+              top_k: 50,
+              repetition_penalty: 1,
+              seed: 0
+            })
+          };
+          
+          const ans = await fetch('https://api.together.xyz/inference', options)
+            // .then(response => response.json())
+            // .then(response => console.log(response["output"]["choices"][0].text))
+            // .catch(err => console.error(err));
+
+        const res = await ans.json()
+        const output = res.output.choices[0].text.trim().split(/\r?\n/);
+       
+        const titleString = output[2].trim()
+        const title = titleString.substring(10, titleString.length - 2);
+
+        const descriptionString = output[3].trim()
+        const description = descriptionString.substring(16, descriptionString.length - 1);
+
+        console.log(description) 
+        // console.log(ans.output.choices[0].text);
     }
 
 
