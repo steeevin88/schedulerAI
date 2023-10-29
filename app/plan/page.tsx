@@ -143,14 +143,21 @@ const Plan: React.FC = () => {
             return a[2] < b[2] ? 1 : -1;
         });
 
-        console.log(openSlots)
+        // console.log(openSlots)
         console.log(new Date(openSlots[0][0]))
         console.log(new Date(openSlots[0][1]))
-
-
+        callAI(new Date(openSlots[0][0]), new Date(openSlots[0][1]) )
     }
 
+    function callAI(s: Date, e: Date){
+        let start = s.toString().substring(0, 11) + s.toString().substring(16, 21);
+        let end = e.toString().substring(0, 11) + e.toString().substring(16, 21);
+        
 
+
+        let input = "My friend and I are free from " + start + " to " + end;
+        console.log(input)
+    }
 
 
   
