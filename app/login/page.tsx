@@ -39,13 +39,12 @@ const page = () => {
 
     // Make the fetch call and handle the response
     const response = await fetch(request);
-    const data = await response.json();
-    console.log(data.hasOwnProperty("email"));
-    if (data.hasOwnProperty("email")) { // non-error json 
-        window.location.href = "../../"
-    } else {
-        setError(data.message)
-        setErrorLink(data.link)
+    try { // error (has JSON response)
+      const data = await response.json();
+      setError(data.message)
+      if (data.link) setErrorLink(data.link)
+    } catch {
+      window.location.href = "../../"
     }
   }
 
@@ -65,10 +64,10 @@ const page = () => {
                 <div className='p-5 w-[50%] bg-yellow-200 rounded-xl my-3 mx-auto shadow-2xl justify-self-center'>
                     <button type='submit' className='justify-self-center'>Submit</button>
                 </div>
+                {error && (errorLink ? <Link href={errorLink} className='text-blue underline'>{error} Click here for Sign Up</Link> : <p>{error}</p>)}
             </form>
         </section>
 
-        {error && (errorLink ? <Link href={errorLink}>{error}</Link> : <p>{error}</p>)}
     </>
   )
 }
