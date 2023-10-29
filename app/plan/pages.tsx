@@ -36,18 +36,48 @@ const Plan: React.FC = () => {
             return response.json(); 
         })
         
-        const myArray = mySchedule.map(mySchedule =>[mySchedule.start_time, mySchedule.end_time]);
-        const friendArray = friendSchedule.map(friendSchedule =>[friendSchedule.start_time, friendSchedule.end_time]);
+
+        // Merge the meetings
+        const myArray = mySchedule.map(mySchedule =>[new Date(mySchedule.start_time), new Date(mySchedule.end_time)]);
+        const friendArray = friendSchedule.map(friendSchedule =>[new Date(friendSchedule.start_time), new Date(friendSchedule.end_time)]);
+        const concatArray = myArray.concat(friendArray);
+        concatArray.sort((a: any, b: any) => {
+            return new Date(a[0]).getTime() - new Date(b[0]).getTime() ? 1 : -1;
+        });
+
+        const merged: [any, any][] = [concatArray[0]];
+
+        for (let i = 1; i < concatArray.length; i++){
+            let currentMeeting = concatArray[i];
+            let lastMergedMeeting = merged[merged.length - 1];
+            if (currentMeeting[0] <= lastMergedMeeting[1]){
+                lastMergedMeeting[1] = Math.max(lastMergedMeeting[1], currentMeeting[1]);
+
+            } else {
+                merged.push(currentMeeting);
+            }
+        }
+
+        // Find the gaps
+        const openSlots: [any, any][] = [];
+        let prevEndTime: number | null = null;
+        for (const interval of merged){
+            if (prevEndTime !== null && prevEndTime < interval[0]){
+                const temp: [any, any] = [prevEndTime, interval[0]];
+                openSlots.push(temp);
+            }
+            prevEndTime = Math.max(interval[1], prevEndTime);
+        }
+
     }
+
+
 
 
     function callAI(){
         
     }
-      
-    function  mergeSchedules(mySchedule, friendSchedule){
-
-    }
+    
   
 
   return (

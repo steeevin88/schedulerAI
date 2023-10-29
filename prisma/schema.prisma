@@ -9,15 +9,10 @@ datasource db {
 
 model User {
   email       String   @unique
-  name        String
+  icsUrl      String
   password    String
   preferences String
-  friends     Friend[] @relation("UserFriends")
-}
-
-model Friend {
-  email       String   @unique
-  user        User     @relation("UserFriends", fields:[email], references: [email])
+  friends     String[]
 }
 
 model Event {

@@ -1,9 +1,12 @@
 'use client';
+import Link from 'next/link';
 import { redirect } from 'next/navigation'
 import React, { useState } from 'react'
+// const ical = require('node-ical');
 
 const Page = () => {
   const [error, setError] = useState('')
+  const [errorLink, setErrorLink] = useState('')
   const [signUpInfo, setSignUpInfo] = useState({
     email: '',
     password: '',
@@ -11,6 +14,9 @@ const Page = () => {
     icsUrl: '',
     preferences: '',
   })
+
+  const { email, password } = signUpInfo;
+
   function handleChange(e: any) {
     setSignUpInfo((prevState) => ({
         ...prevState,
@@ -25,6 +31,7 @@ const Page = () => {
         setError("Passwords do not match")
         return
     }
+    console.log('passwords matched')
     const userData = {
       email, 
       password,
@@ -34,37 +41,49 @@ const Page = () => {
     // Construct the fetch request
     const request = new Request(`../../api/users`, {
       method: "POST",
-      headers: {
-        "email": email,
-        "password": password,
-        "icsUrl": icsUrl,
-        "preferences": preferences,
-      },
+      body: JSON.stringify(userData)
     });
     // Make the fetch call and handle the response
     const response = await fetch(request);
-    const data = await response.json();
-    const headers = response.headers.get('Set-Cookie')
-    if (headers) { // checks for cookie in header
-        console.log(headers)
-        // redirect to home page
-        redirect('/')
-    } else {
-        setError(data.message)
+    try { // error (has JSON response)
+      const data = await response.json();
+      setError(data.message)
+      if (data.link) setErrorLink(data.link)
+    } catch { // successful account sign up
+      // convert icf link to icf via fetch
+      // await ical.async.fromURL(icsUrl, function(err: any, data: any) { console.log(data); });
+
+
+      // redirect to upload calendar
+      window.location.href = "../../uploadcalendar"
     }
   }
 
   return (
-    <div className='w-full h-[80vh] justify-center content-centers flex flex-grow'>
-      <form className='rounded mx-[10%] mt-[10%]  p-5 flex flex-col bg-blue-50 flex-grow'>
-          <input className='p-2 my-2 rounded bg-blue-100' name="email" type="email" placeholder="Email" onChange={handleChange} />
-          <input className='p-2 my-2 rounded bg-blue-100' name="password" type="password" placeholder="Password" onChange={handleChange} />
-          <input className='p-2 my-2 rounded bg-blue-100' name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} />
-          <input className='p-2 my-2 rounded bg-blue-100' name="icsUrl" type="text" placeholder="Link to ICS file" onChange={handleChange} />
-          <input className='p-2 my-2 rounded bg-blue-100' name="preferences" type="text" placeholder="What type of events do you enjoy? ('Clubbing, sports, dancing, etc')" onChange={handleChange} />
-          <button className='bg-blue-500 rounded p-5' onClick={handleClick} >Sign Up</button>
+    <section className='text-center'>
+    <h1 className="my-7 text-7xl font-lato">Sign Up</h1>
+      <form className='w-full justify-center content-centers flex flex-col'>
+        <div>
+          <input className='p-5 bg-blue-100 w-[50%] h-[5vh] my-3 border' name="email" type='email' placeholder="Email" value={email} onChange={handleChange} />
+        </div>
+        <div>
+          <input className='p-5 bg-blue-100 w-[50%] h-[5vh] my-3 border' name="password" type="password" placeholder="Password" value={password} onChange={handleChange} />
+        </div>
+        <div>
+          <input className='p-5 bg-blue-100 w-[50%] h-[5vh] my-3 border' name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} />
+        </div>
+        <div>
+          <input className='p-5 bg-blue-100 w-[50%] h-[5vh] my-3 border' name="icsUrl" type="text" placeholder="Link to ICS file" onChange={handleChange} />
+        </div>
+        <div>
+          <input className='p-5 bg-blue-100 w-[50%] h-[5vh] my-3 border' name="preferences" type="text" placeholder="What type of events do you enjoy? ('Clubbing, sports, dancing, etc')" onChange={handleChange} />
+        </div>
+        <div>
+          <button className='p-5 bg-blue-100 w-[50%] my-3 border rounded-xl' onClick={handleClick}>Sign Up</button>
+          {error && (errorLink ? <div><Link href={errorLink} className='underline'>{error}. Click here to Log In</Link></div>: <p className='text-red-500'>{error}</p>)} 
+        </div>
       </form>
-    </div>
+    </section>
   )
 }
 

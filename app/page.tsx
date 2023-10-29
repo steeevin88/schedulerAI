@@ -7,7 +7,10 @@ const page = () => {
   const [calEvents, setCalEvents] = useState(null);
   const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
   const username = usernameCookie ? usernameCookie[2] : null;
-
+  
+  if (!username) {
+    window.location.href = "../login"
+  }
   const myReq = new Request(`/api/calendar`, {
     method: "GET",
     headers: {
@@ -29,25 +32,6 @@ const page = () => {
     loadCalendar();
   });
 
-
-  /*
-  email
-: 
-"johndoe@gmail.com"
-end_time
-: 
-"2023-10-13T04:30:00.000Z"
-event_name
-: 
-":Grind + Dinner"
-id
-: 
-1
-start_time
-: 
-"2023-10-13T02:30:00.000Z
-   */
-
   type Event = {email: string, end_time: string, event_name: string, id: number, start_time: string}
 
   function formatTime(time: string) {
@@ -57,6 +41,7 @@ start_time
     let hour = time.substring(time.indexOf('T')+1, indDot-3);
     return `${date}\n${hour}`
   }
+
 
   return (
     <div className='flex flex-row flex-wrap'>
