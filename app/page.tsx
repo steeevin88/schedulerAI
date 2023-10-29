@@ -9,10 +9,12 @@ const page = () => {
     window.location.href = "../login"
   }
 
+  
+
 
   return (
     <>
-      test
+      
     </>
   )
 }

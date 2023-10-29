@@ -10,20 +10,21 @@ export const POST = async (req) => {
         const body = await req.json();
         const {email, icsUrl, password, preferences} = body;
 
-        console.log("got body")
+        //console.log("got body")
         // check if email is already registered
         const userExists = await prisma.user.findUnique({
             where: {
                 email: email,
               },
         })
-        console.log(userExists)
+
+        //console.log(userExists)
         if (userExists) {
             console.log('in userExists')
-            return NextResponse.json({message: "An account with that user already exists", link: "../../login"});
+            return NextResponse.json({message: "An account with that user already exists.", link: "../../login"});
         }
         
-        console.log('creating user')
+        //console.log('creating user')
         const newUser = await prisma.user.create({ 
             data: {
                 email,
@@ -32,12 +33,12 @@ export const POST = async (req) => {
                 preferences,
             }
         })
-        console.log("setting cookie")
+        //console.log("setting cookie")
         cookies().set('username', email);
-        console.log("cookie set")
+        //console.log("cookie set")
         return new NextResponse();
     } catch(err) {
-        console.log(err);
+        //console.log(err);
         return NextResponse.json({message: "POST ERROR", err});
     }
 }
@@ -53,7 +54,7 @@ export const GET = async (req) => {
               },
         })
         if (user === null) {
-            return NextResponse.json({message: "User does not exist", link: "../../signup"})
+            return NextResponse.json({message: "User does not exist...", link: "../../signup"})
         }
 
         if (pass === user.password) {
