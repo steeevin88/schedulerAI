@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^14.0.0",
     "@prisma/client": "^5.5.2",
     "next": "14.0.0",
     "pg": "^8.11.3",
     "prisma": "^5.5.2",
+    "node-ical": "^0.16.1",
     "react": "^18",
     "react-dom": "^18"
   },

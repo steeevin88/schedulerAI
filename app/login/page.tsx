@@ -51,25 +51,19 @@ const page = () => {
 
   return (
     <>
-        <section className=''>
-            <h1>
-                Login
-            </h1>
-            <p>Enter your account credentials, upload your calendar</p>
-        </section>
-
-        <section className=''>
+        <section className='text-center'>
+            <h1 className="my-7 text-7xl font-lato">Login</h1>
             <form onSubmit={onSubmit}>
                 <div className=''>
-                    <input type='email' className='input' id='email' name='email' 
+                    <input type='email' className='p-5 w-[50%] my-3 border' id='email' name='email' 
                     value={email} placeholder='Enter your email' onChange={onChange}/>
                 </div>
                 <div className=''>
-                    <input type='password' className='input' id='password' name='password' 
+                    <input type='password' className='p-5 w-[50%] my-3 border' id='password' name='password' 
                      value={password} placeholder='Enter your password' onChange={onChange}/>
                 </div>
-                <div className=''>
-                    <button type='submit' className='btn'>Submit</button>
+                <div className='p-5 w-[50%] bg-yellow-200 rounded-xl my-3 mx-auto shadow-2xl justify-self-center'>
+                    <button type='submit' className='justify-self-center'>Submit</button>
                 </div>
             </form>
         </section>
