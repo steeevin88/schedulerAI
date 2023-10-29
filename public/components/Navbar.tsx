@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 function NavBar() {
 	const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
@@ -15,7 +16,14 @@ function NavBar() {
 	return(
 		<header className="sm:px-16 px-8 py-4 w-full bg-yellow-200">
 			<nav className="flex flex-row justify-between w-full">
-				<div>image</div>
+				<Link href={'/'}>
+					<Image 
+						src="/../assets/house.png"
+						width={50}
+						height={50}
+						alt="Home"
+					/>
+				</Link>
 				<ul className="flex-1 flex justify-center items-center gap-16">
 					<Link href='/'>
 						<li>CALENDAR</li>
