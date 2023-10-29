@@ -1,21 +1,18 @@
-"use client";
-
+'use client';
 import { useState } from 'react'
 
 const page = () => {
+  const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
+  const username = usernameCookie ? usernameCookie[2] : null;
+
+  if (!username) {
+    window.location.href = "../login"
+  }
+
 
   return (
     <>
-        <section className=''>
-            <h1 className=' bg-red-950'>
-                Login
-            </h1>
-            <p>Enter your account credentials, upload your calendar</p>
-        </section>
-
-        <section className=''>
-            <h1> home </h1>
-        </section>
+      test
     </>
   )
 }
