@@ -53,3 +53,15 @@ export const GET = async (req) => {
   return NextResponse.json({message: "GET ERROR", err});
 }
 }
+
+export const DELETE = async () => {
+      try {
+          // const body = await req.json();
+          // const {email} = body;
+          const events = await prisma.event.deleteMany({})
+          console.log(events)
+          return NextResponse.json(events);
+      } catch(err) {
+          return NextResponse.json({message: "DELETE ERROR", err})
+      }
+  }
