@@ -7,6 +7,9 @@ const FileUpload: React.FC = () => {
   const [fileContent, setFileContent] = useState<string>(''); // State to store file content
   const [jsonData, setJsonData] = useState<any>(null); // State to store parsed JSON data
 
+  const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
+  const username = usernameCookie ? usernameCookie[2] : null;
+
   function parseDateString(dateString: string): Date {
     const year: number = parseInt(dateString.substr(0, 4), 10);
     const month: number = parseInt(dateString.substr(4, 2), 10) - 1; // Month in JavaScript Date object is 0-indexed
@@ -36,10 +39,13 @@ const FileUpload: React.FC = () => {
       const filteredArray = lines.filter(line=>{
         return line.includes("DTSTART") || line.includes("DTEND") || line.includes("SUMMARY");
       });
-      
-      const newArray = filteredArray.splice(2);
+      //  for (let i = 0; i < filteredArray.length; i++){
+      //   console.log(filteredArray[i]);
+      // }
+      // const newArray = filteredArray.splice(2);
+      const newArray = filteredArray;
       let index = 0;
-      let events = [];
+      const events: any[] = [];
       const pattern = /\b\d{8}T\d{6}Z\b/;
       // for (let i = 0; i < newArray.length; i++){
       //   console.log(newArray[i]);
@@ -54,15 +60,16 @@ const FileUpload: React.FC = () => {
         index++;
 
         let end_time;
+        // console.log(newArray[index]);
         const end_time_regex = newArray[index].match(pattern);
         if (end_time_regex){
           end_time = parseDateString(end_time_regex.join(''))
         }
 
         index++;
-        const event_name = newArray[index].substring(7, newArray[index].length - 1);
+        const event_name = newArray[index].substring(8, newArray[index].length - 1);
         index++;
-        const email = "johndoe@gmail.com"
+        const email = username
         const event = {
           email,
           start_time,
@@ -87,7 +94,6 @@ const FileUpload: React.FC = () => {
       for (let i = 0; i < events.length; i++){
         // console.log(events[i]);
         const eventJSON = JSON.stringify(events[i]);
-        console.log(eventJSON);
         const request = new Request(`../api/calendar`, {
           method: "Post",
           body: eventJSON,
@@ -100,10 +106,12 @@ const FileUpload: React.FC = () => {
 
     // Read the file as text
     reader.readAsText(file);
+
+    setTimeout(() => {window.location.href = '../../'}, 1000);
   };
 
   return (
-    <div>
+    <div className='flex rounded-xl align-middle justify-center m-[10%] p-10 bg-blue-200 flex-col flex-grow'>
       <h1>Upload File and Convert to JSON</h1>
       <input type="file" onChange={handleFileUpload} />
       <div>
