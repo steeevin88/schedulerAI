@@ -6,9 +6,15 @@ function NavBar() {
 			<nav className="flex flex-row justify-between w-full">
 				<div>image</div>
 				<ul className="flex-1 flex justify-center items-center gap-16">
-					<li>CALENDAR</li>
-					<li>FRIENDS</li>
-					<li>PLAN</li>
+					<Link href='/'>
+						<li>CALENDAR</li>
+					</Link>
+					<Link href={'../friends'}>
+						<li>FRIENDS</li>
+					</Link>
+					<Link href='../plan'>
+						<li>PLAN</li>
+					</Link>
 				</ul>
 				<div className="flex flex-row justify-between">
 					<Link href="../login" rel="noopener noreferrer">
