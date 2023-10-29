@@ -4,6 +4,9 @@
 import { useState } from 'react'
 
 const page = () => {
+
+  
+
   const myEventsPromise = fetch('/api/calendar', )
   const request = new Request(`/api/calendar`, {
     method: "GET",
