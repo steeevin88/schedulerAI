@@ -50,6 +50,7 @@ const FileUpload: React.FC = () => {
         let start_time;
         if (start_time_regex){
           start_time = parseDateString(start_time_regex.join(''))
+          console.log(start_time)
         }
         index++;
 
@@ -60,7 +61,7 @@ const FileUpload: React.FC = () => {
         }
 
         index++;
-        const event_name = newArray[index].substring(7, newArray[index].length - 1);
+        const event_name = newArray[index].substring(8, newArray[index].length - 1);
         index++;
         const email = "johndoe@gmail.com"
         const event = {
