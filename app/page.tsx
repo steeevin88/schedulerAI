@@ -1,8 +1,16 @@
+// Main page hosting the calendar view
 "use client";
 
 import { useState } from 'react'
 
 const page = () => {
+  const myEventsPromise = fetch('/api/calendar', )
+  const request = new Request(`/api/calendar`, {
+    method: "GET",
+    headers: {
+      "email": email,
+    },
+  });
 
   return (
     <>
