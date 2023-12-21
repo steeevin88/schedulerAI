@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 export const GET = async (req) => {
     try {
         const email = req.headers.get("email");
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
             where: {
                 email: email,
               },

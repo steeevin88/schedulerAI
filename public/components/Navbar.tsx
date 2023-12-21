@@ -1,11 +1,20 @@
-'use client';
+"use client"
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 function NavBar() {
-	const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
-	const username = usernameCookie ? usernameCookie[2] : null;
+	const [username, setUsername] = useState<string | null>(null);
+
+	useEffect(() => {
+		// Check if 'document' is available (client-side) before accessing it
+		if (typeof document !== 'undefined') {
+		  const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
+		  const usernameFromCookie = usernameCookie ? usernameCookie[2] : null;
+		  setUsername(usernameFromCookie);
+		}
+	  }, []);
 
 	function signOut() {
 		//delete cookies

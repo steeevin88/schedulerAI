@@ -10,7 +10,7 @@ export const POST = async (req) => {
         const {email} = body;
 
         // check if email is actually registered already
-        const emailExists = await prisma.user.findUnique({
+        const emailExists = await prisma.users.findUnique({
             where: {
                 email: email
             }
@@ -21,7 +21,7 @@ export const POST = async (req) => {
             return NextResponse.json({message: "Invalid account; user is not registered.", err});
         }
 
-        const res = await prisma.user.findUnique({
+        const res = await prisma.users.findUnique({
             where: {
                 email: user.value
             }, 
@@ -36,7 +36,7 @@ export const POST = async (req) => {
         }
     
         // otherwise, we can add the user
-        const userData = await prisma.user.update({ 
+        const userData = await prisma.users.update({ 
             data: {
                 friends: {
                     set: [...res.friends, email],
@@ -52,19 +52,3 @@ export const POST = async (req) => {
         return NextResponse.json({message: "Invalid add.", err});
     }
 }
-
-/*
-export const GET = async () => {
-    try {
-        const user = cookies().get('username')
-        const userData = await prisma.user.findUnique({
-            where: {
-                email: user.value,
-              },
-        })
-        return NextResponse.json({message: userData.friends});
-    } catch(err) {
-        return NextResponse.json({message: "GET ERROR", err});
-    }
-}
-*/

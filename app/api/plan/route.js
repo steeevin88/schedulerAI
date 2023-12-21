@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export const GET = async (req) => {
     try {
         const email = req.headers.get("email");
-        const schedules = await prisma.event.findMany({
+        const schedules = await prisma.events.findMany({
             where: {
                 email: email,
               },

@@ -1,36 +1,45 @@
 // Main page hosting the calendar view
 "use client";
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-const page = () => {
-  const [calEvents, setCalEvents] = useState(null);
-  const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
-  const username = usernameCookie ? usernameCookie[2] : null;
-  
-  if (!username) {
-    window.location.href = "../login"
-  }
-  const myReq = new Request(`/api/calendar`, {
-    method: "GET",
-    headers: {
-      "email": `${username}`
+const Page = () => {
+  const [calEvents, setCalEvents] = useState<Event[] | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadCalendar = async () => {
+      const myReq = new Request(`/api/calendar`, {
+        method: "GET",
+        headers: {
+          "email": `${username}`
+        }
+      });
+      const response = await fetch(myReq);
+      setCalEvents(await response.json());
+    };
+
+    // Delay function to mimic setTimeout
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Access document.cookie inside useEffect to ensure it runs client-side
+    const usernameCookie = document.cookie.match('(^|;)\\s?username\\s?=\\s?([^;]+)');
+    const usernameFromCookie = usernameCookie ? usernameCookie[2] : null;
+    setUsername(usernameFromCookie);
+
+    // Redirect if no username
+    if (!usernameFromCookie) {
+      window.location.href = "../login";
     }
-  });
 
-  async function loadCalendar() {
-    if (calEvents) {return;}
-    const response = await fetch(myReq);
-    setCalEvents(await response.json());
-    console.log(calEvents);
-  }
-  function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-  }
-
-  delay(1000).then(() => {
-    loadCalendar();
-  });
+    // Load calendar events only when username is available
+    if (!calEvents && usernameFromCookie) {
+      // Delay loading calendar by 1 second
+      delay(1000).then(() => {
+        loadCalendar();
+      });
+    }
+  }, [calEvents, username]);
 
   type Event = {email: string, end_time: string, event_name: string, id: number, start_time: string}
 
@@ -59,4 +68,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -7,15 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   email       String   @unique
-  icsUrl      String
   password    String
+  icsUrl      String
   preferences String
   friends     String[]
 }
 
-model Event {
+model Events {
   id          Int      @id @default(sequence())
   email       String   
   event_name  String

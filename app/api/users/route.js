@@ -10,22 +10,19 @@ export const POST = async (req) => {
         const body = await req.json();
         const {email, icsUrl, password, preferences} = body;
 
-        //console.log("got body")
         // check if email is already registered
-        const userExists = await prisma.user.findUnique({
+        const userExists = await prisma.users.findUnique({
             where: {
                 email: email,
               },
         })
 
-        //console.log(userExists)
         if (userExists) {
             console.log('in userExists')
             return NextResponse.json({message: "An account with that user already exists.", link: "../../login"});
         }
         
-        //console.log('creating user')
-        const newUser = await prisma.user.create({ 
+        const newUser = await prisma.users.create({ 
             data: {
                 email,
                 icsUrl,
@@ -33,12 +30,9 @@ export const POST = async (req) => {
                 preferences,
             }
         })
-        //console.log("setting cookie")
         cookies().set('username', email);
-        //console.log("cookie set")
         return new NextResponse();
     } catch(err) {
-        //console.log(err);
         return NextResponse.json({message: "POST ERROR", err});
     }
 }
@@ -48,7 +42,7 @@ export const GET = async (req) => {
     try {
         const email = req.headers.get("email");
         const pass = req.headers.get("password");
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
             where: {
                 email: email,
               },
@@ -69,14 +63,3 @@ export const GET = async (req) => {
         return NextResponse.json({message: "GET ERROR", err});
     }
 }
-
-// export const DELETE = async (req) => {
-//     try {
-//         const body = await req.json();
-//         const {email} = body;
-//         const users = await prisma.user.deleteMany({})
-//         return NextResponse.json(users);
-//     } catch(err) {
-//         return NextResponse.json({message: "DELETE ERROR", err})
-//     }
-// }
