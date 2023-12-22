@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react'
 
-const Page = () => {
+const page = () => {
   const [calEvents, setCalEvents] = useState<Event[] | null>(null);
   const [username, setUsername] = useState<string | null>(null);
 
@@ -68,4 +68,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default page;
